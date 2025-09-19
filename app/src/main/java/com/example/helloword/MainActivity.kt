@@ -54,6 +54,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             ComposeTutorialTheme {
+                // Surface crea una superficie sobre la cual "dibujar"
                 Surface {
                     ScaffoldExample()
                 }
