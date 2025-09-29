@@ -99,76 +99,6 @@ class MainActivity : ComponentActivity() {
 }
 
 /**
- * Composable que muestra un saludo simple con el nombre dado.
- *
- * @param name Nombre que se mostrará en el saludo.
- */
-@Composable
-fun MessageCard(name: String) {
-    Text(text = "Hello $name!")
-}
-
-/**
- * Vista previa de MessageCard con tema aplicado.
- *
- * @param toquesBoton Número de toques para mostrar en el mensaje.
- */
-@Composable
-fun PreviewMessageCard(toquesBoton: Int) {
-    ComposeTutorialTheme {
-        Surface {
-            MessageCard(
-                msg = Message("Lexi", "Nº toques de botón: ", toquesBoton)
-            )
-        }
-    }
-}
-
-/**
- * Data class que representa un mensaje con autor, cuerpo y número de toques.
- *
- * @property author Autor del mensaje.
- * @property body Contenido del mensaje.
- * @property toquesBoton Número de toques relacionados al mensaje.
- */
-data class Message(val author: String, val body: String, val toquesBoton: Int)
-
-/**
- * Composable que muestra un mensaje con imagen y texto formateado.
- *
- * @param msg Objeto Message que contiene la información a mostrar.
- */
-@Composable
-fun MessageCard(msg: Message) {
-    Row(modifier = Modifier.padding(all = 8.dp)) {
-        Image(
-            painter = painterResource(R.drawable.descarga),
-            contentDescription = null,
-            modifier = Modifier
-                .size(40.dp)
-                .clip(CircleShape)
-                .border(1.5.dp, MaterialTheme.colorScheme.primary, CircleShape)
-        )
-        Spacer(modifier = Modifier.width(8.dp))
-
-        Column {
-            Text(
-                text = msg.author,
-                color = MaterialTheme.colorScheme.secondary,
-                style = MaterialTheme.typography.titleSmall
-            )
-
-            Spacer(modifier = Modifier.height(4.dp))
-
-            Text(
-                text = msg.body + msg.toquesBoton,
-                style = MaterialTheme.typography.bodyMedium
-            )
-        }
-    }
-}
-
-/**
  * Vista previa del ScaffoldExample para modo claro.
  */
 @Preview(name = "Light Mode")
@@ -178,70 +108,15 @@ fun ScaffoldExamplePreview() {
 }
 
 /**
- * Composable que crea una fila con botones para enviar email, compartir, abrir navegador y navegar.
- *
- * @param context Contexto para iniciar Intents.
- */
-@Composable
-fun setButtons(context: Context) {
-
-    Row(
-        Modifier
-            .fillMaxWidth()
-            .border(2.dp, Color.Blue, RoundedCornerShape(8.dp)),
-        horizontalArrangement = Arrangement.spacedBy(10.dp, Alignment.CenterHorizontally),
-
-        ) {
-
-        Button(onClick = {
-            val intent = Intent(Intent.ACTION_SENDTO).apply {
-                data = Uri.parse("mailto:alumno@ejemplo.com")
-                putExtra(Intent.EXTRA_SUBJECT, "Saludos desde Compose")
-                putExtra(Intent.EXTRA_TEXT, "Hola, este es un mensaje de prueba")
-            }
-            context.startActivity(intent)
-        }) {
-            Icon(Icons.Default.MailOutline, contentDescription = "Email")
-        }
-
-        Button(onClick = {
-            val intent = Intent(Intent.ACTION_SEND).apply {
-                type = "text/plain"
-                putExtra(Intent.EXTRA_TEXT, "Mira esta app de Compose genial!")
-            }
-            context.startActivity(Intent.createChooser(intent, "Compartir con"))
-        }) {
-            Icon(Icons.Default.Share, contentDescription = "Compartir")
-        }
-
-        Button(onClick = {
-            val url = "https://www.google.com"
-            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-            context.startActivity(intent)
-        }) {
-            Icon(Icons.Default.Info, contentDescription = "Webbrowser")
-        }
-
-        Button(onClick = {
-            // Aquí se puede abrir otra actividad
-            // val intent = Intent(context, OtraActividad::class.java)
-            // context.startActivity(intent)
-        }) {
-            Icon(Icons.Default.Home, contentDescription = "Home")
-        }
-    }
-}
-
-/**
  * Composable que define un Scaffold con barra superior, inferior, y FAB con navegación entre pantallas.
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ScaffoldExample() {
     val context = LocalContext.current
-
     val launcher = ElegirYCompartirImagen(context)
     val navController = rememberNavController()
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -274,6 +149,7 @@ fun ScaffoldExample() {
             modifier = Modifier.padding(innerPadding),
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
+            // definición de rutas de pantallas
             NavHost(navController = navController, startDestination = "home") {
                 composable("home") { HomeScreen(navController) }
                 composable("info") { InfoScreen(navController) }
@@ -410,4 +286,119 @@ fun GalleryScreen(navController: NavController) {
 @Composable
 fun SettingsScreen(navController: NavController) {
     // Contenido de la pantalla Settings
+}
+
+/**
+ * Vista previa de MessageCard con tema aplicado.
+ *
+ * @param toquesBoton Número de toques para mostrar en el mensaje.
+ */
+@Composable
+fun PreviewMessageCard(toquesBoton: Int) {
+    ComposeTutorialTheme {
+        Surface {
+            MessageCard(
+                msg = Message("Lexi", "Nº toques de botón: ", toquesBoton)
+            )
+        }
+    }
+}
+
+/**
+ * Data class que representa un mensaje con autor, cuerpo y número de toques.
+ *
+ * @property author Autor del mensaje.
+ * @property body Contenido del mensaje.
+ * @property toquesBoton Número de toques relacionados al mensaje.
+ */
+data class Message(val author: String, val body: String, val toquesBoton: Int)
+
+/**
+ * Composable que muestra un mensaje con imagen y texto formateado.
+ *
+ * @param msg Objeto Message que contiene la información a mostrar.
+ */
+@Composable
+fun MessageCard(msg: Message) {
+    Row(modifier = Modifier.padding(all = 8.dp)) {
+        Image(
+            painter = painterResource(R.drawable.descarga),
+            contentDescription = null,
+            modifier = Modifier
+                .size(40.dp)
+                .clip(CircleShape)
+                .border(1.5.dp, MaterialTheme.colorScheme.primary, CircleShape)
+        )
+        Spacer(modifier = Modifier.width(8.dp))
+
+        Column {
+            Text(
+                text = msg.author,
+                color = MaterialTheme.colorScheme.secondary,
+                style = MaterialTheme.typography.titleSmall
+            )
+
+            Spacer(modifier = Modifier.height(4.dp))
+
+            Text(
+                text = msg.body + msg.toquesBoton,
+                style = MaterialTheme.typography.bodyMedium
+            )
+        }
+    }
+}
+
+/**
+ * Composable que crea una fila con botones para enviar email, compartir, abrir navegador y navegar.
+ *
+ * @param context Contexto para iniciar Intents.
+ */
+@Composable
+fun setButtons(context: Context) {
+
+    Row(
+        Modifier
+            .fillMaxWidth()
+            .border(2.dp, Color.Blue, RoundedCornerShape(8.dp)),
+        horizontalArrangement = Arrangement.spacedBy(10.dp, Alignment.CenterHorizontally),
+
+        ) {
+
+        Button(onClick = {
+            val intent = Intent(Intent.ACTION_SENDTO).apply {
+                data = Uri.parse("mailto:alumno@ejemplo.com")
+                putExtra(Intent.EXTRA_SUBJECT, "Saludos desde Compose")
+                putExtra(Intent.EXTRA_TEXT, "Hola, este es un mensaje de prueba")
+            }
+            context.startActivity(intent)
+        }) {
+            Icon(Icons.Default.MailOutline, contentDescription = "Email")
+        }
+
+        Button(onClick = {
+            val intent = Intent(Intent.ACTION_SEND).apply {
+                type = "text/plain"
+                putExtra(Intent.EXTRA_TEXT, "Mira esta app de Compose genial!")
+            }
+            context.startActivity(Intent.createChooser(intent, "Compartir con"))
+        }) {
+            Icon(Icons.Default.Share, contentDescription = "Compartir")
+        }
+
+        Button(onClick = {
+            val url = "https://www.google.com"
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+            context.startActivity(intent)
+        }) {
+            Icon(Icons.Default.Info, contentDescription = "Webbrowser")
+        }
+
+        Button(onClick = {
+            // Aquí se puede abrir otra actividad
+            // val intent = Intent(context, OtraActividad::class.java)
+            // context.startActivity(intent)
+        }) {
+            Icon(Icons.Default.Home, contentDescription = "Home")
+        }
+    }
 }
