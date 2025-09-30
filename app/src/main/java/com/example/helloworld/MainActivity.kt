@@ -78,7 +78,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 
 /**
- * Actividad principal de la aplicación.
+ *  Actividad principal de la aplicación.
  * Controla el ciclo de vida y la UI principal.
  */
 class MainActivity : ComponentActivity() {
